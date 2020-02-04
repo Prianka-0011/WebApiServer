@@ -1,0 +1,14 @@
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\bin\Debug\netcoreapp2.2\Api+AngularFinal.deps.json
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\bin\Debug\netcoreapp2.2\Api+AngularFinal.runtimeconfig.json
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\bin\Debug\netcoreapp2.2\Api+AngularFinal.runtimeconfig.dev.json
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\bin\Debug\netcoreapp2.2\Api+AngularFinal.dll
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.csprojAssemblyReference.cache
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.csproj.CoreCompileInputs.cache
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.RazorAssemblyInfo.cache
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.RazorAssemblyInfo.cs
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.AssemblyInfoInputs.cache
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.AssemblyInfo.cs
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.RazorTargetAssemblyInfo.cache
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\bin\Debug\netcoreapp2.2\Api+AngularFinal.pdb
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.dll
+C:\Users\niku\source\repos\Api+AngularFinal\Api+AngularFinal\obj\Debug\netcoreapp2.2\Api+AngularFinal.pdb
