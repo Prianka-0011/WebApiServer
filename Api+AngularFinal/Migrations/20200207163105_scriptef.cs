@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api_AngularFinal.Migrations
 {
-    public partial class scriptA : Migration
+    public partial class scriptef : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,8 +53,7 @@ namespace Api_AngularFinal.Migrations
                 name: "TodoTask",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Task = table.Column<string>(nullable: true),
                     Date = table.Column<string>(nullable: true)
                 },

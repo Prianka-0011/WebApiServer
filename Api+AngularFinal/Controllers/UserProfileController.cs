@@ -24,7 +24,7 @@ namespace Api_AngularFinal.Controllers
         //GET : /api/UserProfile
         public async Task<Object>GetUserProfile()
         {
-            string userId = User.Claims.First(c => c.Type == "UserID").Value;
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
             var user = await _userManager.FindByIdAsync(userId);
             return new
             {

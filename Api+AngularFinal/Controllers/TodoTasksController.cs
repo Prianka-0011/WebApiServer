@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Api_AngularFinal.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api_AngularFinal.Controllers
 {
@@ -13,38 +14,51 @@ namespace Api_AngularFinal.Controllers
     [ApiController]
     public class TodoTasksController : ControllerBase
     {
-        private readonly AuthenticationContext _context;
+        private readonly AuthenticationContex _context;
 
-        public TodoTasksController(AuthenticationContext context)
+        public TodoTasksController(AuthenticationContex context)
         {
             _context = context;
         }
 
         // GET: api/TodoTasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoTask>>> GetTodoTask()
+        [Authorize]
+        public ActionResult<IEnumerable<TodoTask>> GetTodoTask()
         {
-            return await _context.TodoTask.ToListAsync();
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var task =  _context.TodoTask.Where(t => t.UserId == userId);
+            return Ok(task);           
         }
 
         // GET: api/TodoTasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoTask>> GetTodoTask(int id)
+        [Authorize]
+        public async Task<ActionResult<TodoTask>> GetTodoTask(Guid id)
         {
             var todoTask = await _context.TodoTask.FindAsync(id);
-
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
             if (todoTask == null)
             {
                 return NotFound();
             }
-
-            return todoTask;
+            if(todoTask.UserId==userId)
+            {
+                return todoTask;
+            }
+            else
+            {
+                return NotFound();
+            }
+            
         }
 
         // PUT: api/TodoTasks/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoTask(int id, TodoTask todoTask)
+        [Authorize]
+        public async Task<IActionResult> PutTodoTask(Guid id, TodoTask todoTask)
         {
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
             if (id != todoTask.Id)
             {
                 return BadRequest();
@@ -54,7 +68,11 @@ namespace Api_AngularFinal.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                if(todoTask.UserId==userId)
+                {
+                    await _context.SaveChangesAsync();
+                }
+                
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,31 +91,47 @@ namespace Api_AngularFinal.Controllers
 
         // POST: api/TodoTasks
         [HttpPost]
-        public async Task<ActionResult<TodoTask>> PostTodoTask(TodoTask todoTask)
+        [Authorize]
+        public async Task<ActionResult<TodoTask>> PostTodoTask(TodoTaskVM todoTask)
         {
-            _context.TodoTask.Add(todoTask);
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
+            TodoTask task = new TodoTask();
+            task.Task = todoTask.Task;
+            task.Date = todoTask.Date;
+            task.UserId = userId;
+            _context.TodoTask.Add(task);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTodoTask", new { id = todoTask.Id }, todoTask);
         }
-
+ 
         // DELETE: api/TodoTasks/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TodoTask>> DeleteTodoTask(int id)
+        [Authorize]
+        public async Task<ActionResult<TodoTask>> DeleteTodoTask(Guid id)
         {
+            string userId = User.Claims.First(c => c.Type == "UserId").Value;
             var todoTask = await _context.TodoTask.FindAsync(id);
-            if (todoTask == null)
+            if (todoTask == null||userId==null)
             {
                 return NotFound();
             }
+            if(todoTask.UserId==userId)
+            {
+                _context.TodoTask.Remove(todoTask);
+                await _context.SaveChangesAsync();
+                return todoTask;
+            }
+            else
+            {
+                return NotFound();
+            }
+           
 
-            _context.TodoTask.Remove(todoTask);
-            await _context.SaveChangesAsync();
-
-            return todoTask;
+            
         }
 
-        private bool TodoTaskExists(int id)
+        private bool TodoTaskExists(Guid id)
         {
             return _context.TodoTask.Any(e => e.Id == id);
         }

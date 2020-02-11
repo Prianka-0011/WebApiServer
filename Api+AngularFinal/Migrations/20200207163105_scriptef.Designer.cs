@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api_AngularFinal.Migrations
 {
-    [DbContext(typeof(AuthenticationContext))]
-    [Migration("20200122105456_scriptA")]
-    partial class scriptA
+    [DbContext(typeof(AuthenticationContex))]
+    [Migration("20200207163105_scriptef")]
+    partial class scriptef
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,9 +23,8 @@ namespace Api_AngularFinal.Migrations
 
             modelBuilder.Entity("Api_AngularFinal.Models.TodoTask", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Date");
 

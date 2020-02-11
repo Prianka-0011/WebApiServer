@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace Api_AngularFinal.Models
 {
-    public class TodoTask
+    public class TodoTaskVM
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Task { get; set; }
         public string Date { get; set; }
-        public string UserId { get; set; }
     }
 }

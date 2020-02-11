@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api_AngularFinal.Migrations
 {
-    [DbContext(typeof(AuthenticationContext))]
-    partial class AuthenticationContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AuthenticationContex))]
+    partial class AuthenticationContexModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,14 @@ namespace Api_AngularFinal.Migrations
 
             modelBuilder.Entity("Api_AngularFinal.Models.TodoTask", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Date");
 
                     b.Property<string>("Task");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 

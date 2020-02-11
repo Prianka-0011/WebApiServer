@@ -44,9 +44,9 @@ namespace Api_AngularFinal
                 });
             //AddDefault Identity
             services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<AuthenticationContext>();
+                .AddEntityFrameworkStores<AuthenticationContex>();
             //ConnectionSetting for database
-            services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            services.AddDbContext<AuthenticationContex>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
             //DefaultAuthentication for password False
             services.Configure<IdentityOptions>(options =>
             {
