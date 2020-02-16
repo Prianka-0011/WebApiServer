@@ -15,5 +15,6 @@ namespace Api_AngularFinal.Models
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Api_AngularFinal.Models.TodoTask> TodoTask { get; set; }
+        public DbSet<Api_AngularFinal.Models.EventList> EventLists { get; set; }
     }
 }

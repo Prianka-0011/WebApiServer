@@ -19,6 +19,7 @@ namespace Api_AngularFinal.Controllers
         {
             _userManager = userManager;
         }
+
         [HttpGet]
         [Authorize]
         //GET : /api/UserProfile
@@ -33,5 +34,14 @@ namespace Api_AngularFinal.Controllers
                 user.UserName
             };
         }
+        [HttpGet]
+        [Route("GetUsers")]
+        public ActionResult GetUsers()
+        {
+            var applicationUser = _userManager.Users.ToList();
+          
+            return Ok(applicationUser);
+        }
+
     }
 }

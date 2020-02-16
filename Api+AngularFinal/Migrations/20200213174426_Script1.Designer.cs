@@ -4,14 +4,16 @@ using Api_AngularFinal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api_AngularFinal.Migrations
 {
     [DbContext(typeof(AuthenticationContex))]
-    partial class AuthenticationContexModelSnapshot : ModelSnapshot
+    [Migration("20200213174426_Script1")]
+    partial class Script1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,8 +29,6 @@ namespace Api_AngularFinal.Migrations
                     b.Property<string>("Date");
 
                     b.Property<string>("Task");
-
-                    b.Property<string>("UserId");
 
                     b.Property<string>("UserName");
 
