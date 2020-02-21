@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api_AngularFinal.Models
+namespace Api_AngularFinal.ViewModel
 {
-    public class TodoTask
+    public class ReturnShareEvent_VM
     {
-        public Guid Id { get; set; }
         public string Task { get; set; }
         public string Date { get; set; }
-        public string UserId { get; set; }
-        public List<EventList> eventLists { get; set; }
+        public string UserName { get; set; }
     }
 }

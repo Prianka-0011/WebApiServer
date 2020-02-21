@@ -8,9 +8,8 @@ namespace Api_AngularFinal.Models
     public class EventList
     {
         public Guid Id { get; set; }
-        public string TaskId { get; set; }
-        public int MyProperty { get; set; }
         public string UserId { get; set; }
-
+        public Guid TaskId { get; set; }
+        public TodoTask TodoTask { get; set; }
     }
 }
