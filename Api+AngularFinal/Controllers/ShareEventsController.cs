@@ -45,6 +45,8 @@ namespace Api_AngularFinal.Controllers
                         share1.UserName = user.UserName;
                         share1.Task = item1.Task;
                         share1.Date = item1.Date;
+                        share1.Place = item1.Place;
+                        share1.Description = item1.Description;
                         todoTaskList.Add(share1);
                     }
                 }

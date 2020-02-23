@@ -20,20 +20,18 @@ namespace Api_AngularFinal.Controllers
         {
             _context = context;
         }
-
         // GET: api/TodoTasks
-        [HttpGet]
         [Authorize]
+        [HttpGet]
         public ActionResult<IEnumerable<TodoTask>> GetTodoTask()
         {
             string userId = User.Claims.First(c => c.Type == "UserId").Value;
             var task =  _context.TodoTask.Where(t => t.UserId == userId);
             return Ok(task);           
         }
-
         // GET: api/TodoTasks/5
-        [HttpGet("{id}")]
         [Authorize]
+        [HttpGet("{id}")]
         public async Task<ActionResult<TodoTask>> GetTodoTask(Guid id)
         {
             var todoTask = await _context.TodoTask.FindAsync(id);
@@ -52,10 +50,9 @@ namespace Api_AngularFinal.Controllers
             }
             
         }
-
         // PUT: api/TodoTasks/5
-        [HttpPut("{id}")]
         [Authorize]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoTask(Guid id, TodoTask todoTask)
         {
             string userId = User.Claims.First(c => c.Type == "UserId").Value;
@@ -98,6 +95,8 @@ namespace Api_AngularFinal.Controllers
             TodoTask task = new TodoTask();
             task.Task = todoTask.Task;
             task.Date = todoTask.Date;
+            task.Place = todoTask.Place;
+            task.Description = todoTask.Description;
             task.UserId = userId;
             _context.TodoTask.Add(task);
             await _context.SaveChangesAsync();
