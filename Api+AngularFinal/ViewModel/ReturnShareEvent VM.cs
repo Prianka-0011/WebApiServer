@@ -7,6 +7,7 @@ namespace Api_AngularFinal.ViewModel
 {
     public class ReturnShareEvent_VM
     {
+        public Guid Id { get; set; }
         public string Task { get; set; }
         public string Date { get; set; }
         public string UserName { get; set; }

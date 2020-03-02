@@ -42,7 +42,9 @@ namespace Api_AngularFinal.Controllers
                     {
                         ReturnShareEvent_VM share1 = new ReturnShareEvent_VM();
                         var user = _context.ApplicationUsers.Find(item1.UserId);
+                       
                         share1.UserName = user.UserName;
+                        share1.Id = item1.Id;
                         share1.Task = item1.Task;
                         share1.Date = item1.Date;
                         share1.Place = item1.Place;
