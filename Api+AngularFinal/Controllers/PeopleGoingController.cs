@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api_AngularFinal.Models;
+using Api_AngularFinal.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api_AngularFinal.Controllers
 {
@@ -21,186 +23,196 @@ namespace Api_AngularFinal.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [Route("/going/eventId")]
-        [HttpGet("{id}")]
-        public ActionResult GetEventGoing(Guid eventId)
-        {
-            var going = _context.GoingEvents.Where(g=>g.GoingTaskId== eventId).ToList();
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            if (going == null)
-            {
-                return NotFound();
-            }
-            var goingcount = going.Count();
-                return Ok(goingcount);
+        //[Route("/going/eventId")]
+        //[HttpGet("{id}")]
+        //public ActionResult GetEventGoing(Guid eventId)
+        //{
+        //    var going = _context.GoingEvents.Where(g=>g.GoingTaskId== eventId).ToList();
+        //    string userId = User.Claims.First(c => c.Type == "UserId").Value;
+        //    if (going == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var goingcount = going.Count();
+        //        return Ok(goingcount);
 
-        }
-        [Route("/maybe/eventId")]
-        [HttpGet("{id}")]
-        public ActionResult GetEventGoingMaybe(Guid eventId)
-        {
-            var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == eventId).ToList();
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            if (maybe == null)
-            {
-                return NotFound();
-            }
-            var goingMaybecount = maybe.Count();
-            return Ok(goingMaybecount);
+        //}
+        //[Route("/maybe/eventId")]
+        //[HttpGet("{id}")]
+        //public ActionResult GetEventGoingMaybe(Guid eventId)
+        //{
+        //    var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == eventId).ToList();
+        //    string userId = User.Claims.First(c => c.Type == "UserId").Value;
+        //    if (maybe == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var goingMaybecount = maybe.Count();
+        //    return Ok(goingMaybecount);
 
-        }
-        [Route("/notinterest/eventId")]
-        [HttpGet("{id}")]
-        public ActionResult GetEventGoingNotIntrst(Guid eventId)
-        {
-            var notinterest = _context.NotInterests.Where(g => g.NotTaskId == eventId).ToList();
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            if (notinterest == null)
-            {
-                return NotFound();
-            }
-            var goingnotinterstcount = notinterest.Count();
-            return Ok(goingnotinterstcount);
+        //}
+        //[Route("/notinterest/eventId")]
+        //[HttpGet("{id}")]
+        //public ActionResult GetEventGoingNotIntrst(Guid eventId)
+        //{
+        //    var notinterest = _context.NotInterests.Where(g => g.NotTaskId == eventId).ToList();
+        //    string userId = User.Claims.First(c => c.Type == "UserId").Value;
+        //    if (notinterest == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var goingnotinterstcount = notinterest.Count();
+        //    return Ok(goingnotinterstcount);
 
-        }
+        //}
         [HttpPost]
         [Route("PostMaybe")]
 
-        public ActionResult PostGoingEvent(Guid goingTaskId)
+        public ActionResult PostGoingEvent(GMN goingevent)
         {
             string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            var going = _context.GoingEvents.Where(g => g.GoingTaskId == goingTaskId).ToList();
-            var notintereste = _context.NotInterests.Where(g => g.NotTaskId == goingTaskId).ToList();
-
-            MayBeGoingE maygoEvent = new MayBeGoingE();
-            if (going!=null)
+            EventsGoPeople eventsGo = new EventsGoPeople();
+            var gopeoplecon = _context.eventsGoPeoples.ToList();
+            var count = 0;
+            foreach (var item in gopeoplecon)
             {
-                foreach (var item in going)
+                if (item.UserId.Equals(userId) )
                 {
-                    if (item.UserId.Equals(userId))
+                    if(item.TaskId==goingevent.TaskId)
                     {
-                        var goingEvent = _context.GoingEvents.Find(item.Id);
-                        _context.GoingEvents.Remove(goingEvent);
-                        _context.SaveChanges();
+                        item.GMN = goingevent.Type;
 
-
-
+                        _context.Entry(item).State = EntityState.Modified;
+                        try
+                        {
+                            _context.SaveChanges();
+                        }
+                        catch(DbUpdateConcurrencyException)
+                        {
+                            return NotFound();
+                        }
+                        count = 1;
                     }
+                    
+                    //_context.Entry(goingevent).State = EntityState.Modified;
+                    //try
+                    //{
 
+                    //        _context.SaveChangesAsync();
+
+
+                    //}
+                    //catch (DbUpdateConcurrencyException)
+                    //{
+
+                    //        return NotFound();
+
+                    //}
                 }
             }
-            if (notintereste!=null)
+            if(count==0)
             {
-                foreach (var item1 in notintereste)
-                {
-                    if (item1.UserId.Equals(userId))
-                    {
+                eventsGo.UserId = userId;
+                eventsGo.TaskId = goingevent.TaskId;
+                eventsGo.GMN = goingevent.Type;
 
-                        var nointerest1 = _context.NotInterests.Find(item1.Id);
-                        _context.NotInterests.Remove(nointerest1);
-                        _context.SaveChanges();
-
-                    }
-                }
+                _context.eventsGoPeoples.Add(eventsGo);
+                _context.SaveChanges();
             }
            
-            maygoEvent.UserId = userId;
-            maygoEvent.MayBeTaskId = goingTaskId;
-            _context.MayBeGoingEs.Add(maygoEvent);
-            _context.SaveChanges();
 
-            return Ok(goingTaskId);
+            return Ok(goingevent);
         }
 
-        [HttpPost]
-        [Route("PostGoing")]
+        //[HttpPost]
+        //[Route("PostGoing")]
 
-        public ActionResult PostMaybeEvent(Guid goingTaskId)
-        {
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == goingTaskId).ToList();
-            var notintereste = _context.NotInterests.Where(g => g.NotTaskId == goingTaskId).ToList();
-            GoingEvent going = new GoingEvent();
-            if (maybe!=null)
-            {
-                foreach (var item in maybe)
-                {
-                    if (item.UserId.Equals(userId))
-                    {
+        //public ActionResult PostMaybeEvent(Guid goingTaskId)
+        //{
+        //    string userId = User.Claims.First(c => c.Type == "UserId").Value;
+        //    var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == goingTaskId).ToList();
+        //    var notintereste = _context.NotInterests.Where(g => g.NotTaskId == goingTaskId).ToList();
+        //    GoingEvent going = new GoingEvent();
+        //    if (maybe!=null)
+        //    {
+        //        foreach (var item in maybe)
+        //        {
+        //            if (item.UserId.Equals(userId))
+        //            {
 
-                        var goingmayEve = _context.MayBeGoingEs.Find(item.Id);
-                        _context.MayBeGoingEs.Remove(goingmayEve);
-                        _context.SaveChanges();
+        //                var goingmayEve = _context.MayBeGoingEs.Find(item.Id);
+        //                _context.MayBeGoingEs.Remove(goingmayEve);
+        //                _context.SaveChanges();
 
-                    }
-                }
-            }
-            if (notintereste!=null)
-            {
-                foreach (var item in notintereste)
-                {
-                    if (item.UserId.Equals(userId))
-                    {
+        //            }
+        //        }
+        //    }
+        //    if (notintereste!=null)
+        //    {
+        //        foreach (var item in notintereste)
+        //        {
+        //            if (item.UserId.Equals(userId))
+        //            {
 
-                        var nointerest1 = _context.NotInterests.Find(item.Id);
-                        _context.NotInterests.Remove(nointerest1);
-                        _context.SaveChanges();
+        //                var nointerest1 = _context.NotInterests.Find(item.Id);
+        //                _context.NotInterests.Remove(nointerest1);
+        //                _context.SaveChanges();
 
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
           
-            going.UserId = userId;
-            going.GoingTaskId = goingTaskId;
-            _context.GoingEvents.Add(going);
-            _context.SaveChanges();
-            return Ok(goingTaskId);
-        }
-        [Route("PostNotInterest")]
-        [HttpPost]
-        public ActionResult PostNtInterestedEvent(Guid goingTaskId)
-        {
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            var going = _context.GoingEvents.Where(g => g.GoingTaskId == goingTaskId).ToList();
-            var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == goingTaskId).ToList();
-            NotInterest notinterest = new NotInterest();
-            if (going!=null)
-            {
-                foreach (var item in going)
-                {
-                    if (item.UserId.Equals(userId))
-                    {
+        //    going.UserId = userId;
+        //    going.GoingTaskId = goingTaskId;
+        //    _context.GoingEvents.Add(going);
+        //    _context.SaveChanges();
+        //    return Ok(goingTaskId);
+        //}
+        //[Route("PostNotInterest")]
+        //[HttpPost]
+        //public ActionResult PostNtInterestedEvent(Guid goingTaskId)
+        //{
+        //    string userId = User.Claims.First(c => c.Type == "UserId").Value;
+        //    var going = _context.GoingEvents.Where(g => g.GoingTaskId == goingTaskId).ToList();
+        //    var maybe = _context.MayBeGoingEs.Where(g => g.MayBeTaskId == goingTaskId).ToList();
+        //    NotInterest notinterest = new NotInterest();
+        //    if (going!=null)
+        //    {
+        //        foreach (var item in going)
+        //        {
+        //            if (item.UserId.Equals(userId))
+        //            {
 
-                        var goingEve = _context.GoingEvents.Find(item.Id);
-                        _context.GoingEvents.Remove(goingEve);
-                        _context.SaveChanges();
+        //                var goingEve = _context.GoingEvents.Find(item.Id);
+        //                _context.GoingEvents.Remove(goingEve);
+        //                _context.SaveChanges();
 
 
-                    }
-                }
-            }
-            if (maybe!=null)
-            {
-                foreach (var item in maybe)
-                {
-                    if (item.UserId.Equals(userId))
-                    {
+        //            }
+        //        }
+        //    }
+        //    if (maybe!=null)
+        //    {
+        //        foreach (var item in maybe)
+        //        {
+        //            if (item.UserId.Equals(userId))
+        //            {
 
-                        var maybe1 = _context.MayBeGoingEs.Find(item.Id);
-                        _context.MayBeGoingEs.Remove(maybe1);
-                        _context.SaveChanges();
+        //                var maybe1 = _context.MayBeGoingEs.Find(item.Id);
+        //                _context.MayBeGoingEs.Remove(maybe1);
+        //                _context.SaveChanges();
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
             
-            notinterest.UserId = userId;
-            notinterest.NotTaskId = goingTaskId;
-            _context.NotInterests.Add(notinterest);//here i make mistake
-            _context.SaveChanges();
-            return Ok(goingTaskId);
-        }
+        //    notinterest.UserId = userId;
+        //    notinterest.NotTaskId = goingTaskId;
+        //    _context.NotInterests.Add(notinterest);//here i make mistake
+        //    _context.SaveChanges();
+        //    return Ok(goingTaskId);
+        //}
 
     }
 }

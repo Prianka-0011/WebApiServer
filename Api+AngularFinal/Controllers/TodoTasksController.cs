@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Api_AngularFinal.Models;
 using Microsoft.AspNetCore.Authorization;
+using Api_AngularFinal.ViewModel;
 
 namespace Api_AngularFinal.Controllers
 {
@@ -23,11 +24,33 @@ namespace Api_AngularFinal.Controllers
         // GET: api/TodoTasks
         [Authorize]
         [HttpGet]
-        public ActionResult<IEnumerable<TodoTask>> GetTodoTask()
+        public ActionResult<IEnumerable<TodoTaskFinal>> GetTodoTask()
         {
             string userId = User.Claims.First(c => c.Type == "UserId").Value;
+            TodoTaskFinal todoTaskFinal = new TodoTaskFinal();
             var task =  _context.TodoTask.Where(t => t.UserId == userId);
-            return Ok(task);           
+            var go = _context.eventsGoPeoples.ToList();
+           List <TodoTaskFinal> todoTaskFinal1 = new List<TodoTaskFinal>();
+            foreach (var item in task)
+            {
+                
+                    var gmn = go.Where(g => g.TaskId == item.Id && g.GMN == 1).ToList();
+                    var gmn1 = go.Where(g => g.TaskId == item.Id && g.GMN == 2).ToList();
+                    var gmn2 = go.Where(g => g.TaskId == item.Id && g.GMN == 3).ToList();
+                    todoTaskFinal.Id = item.Id;
+                    todoTaskFinal.Task = item.Task;
+                    todoTaskFinal.Date = item.Date;
+                    todoTaskFinal.Description = item.Description;
+                    todoTaskFinal.Place = item.Place;
+                    todoTaskFinal.Typego = gmn.Count();
+                    todoTaskFinal.Typemay = gmn1.Count();
+                    todoTaskFinal.TypeNinterest = gmn2.Count();
+                    todoTaskFinal1.Add(todoTaskFinal);
+                
+                
+            }
+            
+            return Ok(todoTaskFinal1);           
         }
         // GET: api/TodoTasks/5
         [Authorize]

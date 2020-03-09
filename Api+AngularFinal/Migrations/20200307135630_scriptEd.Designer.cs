@@ -4,14 +4,16 @@ using Api_AngularFinal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api_AngularFinal.Migrations
 {
     [DbContext(typeof(AuthenticationContex))]
-    partial class AuthenticationContexModelSnapshot : ModelSnapshot
+    [Migration("20200307135630_scriptEd")]
+    partial class scriptEd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,8 +29,6 @@ namespace Api_AngularFinal.Migrations
                     b.Property<Guid>("TaskId");
 
                     b.Property<Guid?>("TodoTaskId");
-
-                    b.Property<int>("Type");
 
                     b.Property<string>("UserId");
 
@@ -56,7 +56,49 @@ namespace Api_AngularFinal.Migrations
 
                     b.HasIndex("TodoTaskId");
 
-                    b.ToTable("eventsGoPeoples");
+                    b.ToTable("EventsGoPeople");
+                });
+
+            modelBuilder.Entity("Api_AngularFinal.Models.GoingEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("GoingTaskId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoingEvents");
+                });
+
+            modelBuilder.Entity("Api_AngularFinal.Models.MayBeGoingE", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("MayBeTaskId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MayBeGoingEs");
+                });
+
+            modelBuilder.Entity("Api_AngularFinal.Models.NotInterest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("NotTaskId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotInterests");
                 });
 
             modelBuilder.Entity("Api_AngularFinal.Models.TodoTask", b =>

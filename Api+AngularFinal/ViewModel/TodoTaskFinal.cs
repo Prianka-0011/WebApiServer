@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api_AngularFinal.Models
+namespace Api_AngularFinal.ViewModel
 {
-    public class TodoTask
+    public class TodoTaskFinal
     {
         public Guid Id { get; set; }
         public string Task { get; set; }
@@ -13,7 +13,8 @@ namespace Api_AngularFinal.Models
         public string Place { get; set; }
         public string Description { get; set; }
         public string UserId { get; set; }
-        public List<EventsGoPeople> goPeoples { get; set; }
-        public List<EventList> eventLists { get; set; }
+        public int Typego { get; set; }
+        public int Typemay { get; set; }
+        public int TypeNinterest { get; set; }
     }
 }
