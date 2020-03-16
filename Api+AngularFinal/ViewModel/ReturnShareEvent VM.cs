@@ -13,5 +13,8 @@ namespace Api_AngularFinal.ViewModel
         public string UserName { get; set; }
         public string Place { get; set; }
         public string Description { get; set; }
+        public Boolean go { get; set; }
+        public Boolean may { get; set; }
+        public Boolean not { get; set; }
     }
 }

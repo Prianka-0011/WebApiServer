@@ -49,6 +49,9 @@ namespace Api_AngularFinal.Controllers
                         share1.Date = item1.Date;
                         share1.Place = item1.Place;
                         share1.Description = item1.Description;
+                        share1.go = true;
+                        share1.may = true;
+                        share1.not = true;
                         todoTaskList.Add(share1);
                     }
                 }

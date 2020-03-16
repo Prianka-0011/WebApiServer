@@ -27,27 +27,28 @@ namespace Api_AngularFinal.Controllers
         public ActionResult<IEnumerable<TodoTaskFinal>> GetTodoTask()
         {
             string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            TodoTaskFinal todoTaskFinal = new TodoTaskFinal();
-            var task =  _context.TodoTask.Where(t => t.UserId == userId);
+            
+            var task =  _context.TodoTask.Where(t => t.UserId == userId).ToList();
             var go = _context.eventsGoPeoples.ToList();
            List <TodoTaskFinal> todoTaskFinal1 = new List<TodoTaskFinal>();
             foreach (var item in task)
             {
-                
-                    var gmn = go.Where(g => g.TaskId == item.Id && g.GMN == 1).ToList();
+                TodoTaskFinal Final = new TodoTaskFinal();
+
+                  var gmn = go.Where(g => g.TaskId == item.Id && g.GMN == 1).ToList();
                     var gmn1 = go.Where(g => g.TaskId == item.Id && g.GMN == 2).ToList();
                     var gmn2 = go.Where(g => g.TaskId == item.Id && g.GMN == 3).ToList();
-                    todoTaskFinal.Id = item.Id;
-                    todoTaskFinal.Task = item.Task;
-                    todoTaskFinal.Date = item.Date;
-                    todoTaskFinal.Description = item.Description;
-                    todoTaskFinal.Place = item.Place;
-                    todoTaskFinal.Typego = gmn.Count();
-                    todoTaskFinal.Typemay = gmn1.Count();
-                    todoTaskFinal.TypeNinterest = gmn2.Count();
-                    todoTaskFinal1.Add(todoTaskFinal);
-                
-                
+                     Final.Id = item.Id;
+                     Final.Task = item.Task;
+                     Final.UserId = item.UserId;
+                     Final.Date = item.Date;
+                     Final.Description = item.Description;
+                     Final.Place = item.Place;
+                     Final.Typego = gmn.Count();
+                     Final.Typemay = gmn1.Count();
+                     Final.TypeNinterest = gmn2.Count();
+                    todoTaskFinal1.Add(Final);
+ 
             }
             
             return Ok(todoTaskFinal1);           
@@ -76,19 +77,28 @@ namespace Api_AngularFinal.Controllers
         // PUT: api/TodoTasks/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoTask(Guid id, TodoTask todoTask)
+        public async Task<IActionResult> PutTodoTask(Guid Id, TodoTaskFinal todoTaskFinal)
         {
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            if (id != todoTask.Id)
+
+            
+            if (Id != todoTaskFinal.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(todoTask).State = EntityState.Modified;
+                TodoTask todoTask = new TodoTask();
+                todoTask.Task = todoTaskFinal.Task;
+                todoTask.Date= todoTaskFinal.Date;
+                todoTask.Description = todoTaskFinal.Description;
+                todoTask.Place = todoTaskFinal.Place;
+                _context.Entry(todoTask).State = EntityState.Modified;
+            
+           
 
             try
             {
-                if(todoTask.UserId==userId)
+                string userId = User.Claims.First(c => c.Type == "UserId").Value;
+                if (todoTaskFinal.UserId==userId)
                 {
                     await _context.SaveChangesAsync();
                 }
@@ -96,7 +106,7 @@ namespace Api_AngularFinal.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TodoTaskExists(id))
+                if (!TodoTaskExists(Id))
                 {
                     return NotFound();
                 }
