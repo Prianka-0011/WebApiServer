@@ -86,14 +86,16 @@ namespace Api_AngularFinal.Controllers
                 return BadRequest();
             }
 
-                TodoTask todoTask = new TodoTask();
+                TodoTask todoTask = _context.TodoTask.Find(todoTaskFinal.Id);
+            if (todoTask!=null)
+            {
                 todoTask.Task = todoTaskFinal.Task;
-                todoTask.Date= todoTaskFinal.Date;
+                todoTask.Date = todoTaskFinal.Date;
                 todoTask.Description = todoTaskFinal.Description;
                 todoTask.Place = todoTaskFinal.Place;
                 _context.Entry(todoTask).State = EntityState.Modified;
-            
-           
+            }
+               
 
             try
             {
